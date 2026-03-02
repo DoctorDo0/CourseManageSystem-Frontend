@@ -84,6 +84,13 @@
       <el-table-column type="selection" align="center" fixed/>
       <el-table-column prop="id" label="ID" width="80" fixed/>
       <el-table-column prop="memberId" label="会员ID" width="100" fixed/>
+
+      <el-table-column prop="avatar" label="头像" width="100" fixed="left">
+        <template #default="scope">
+          <div class="row-avatar" :style="'background-image: url('+scope.row.avatar+')'"></div>
+        </template>
+      </el-table-column>
+
       <el-table-column prop="name" label="姓名" width="140" fixed/>
       <el-table-column prop="gender" label="性别" width="60" align="center"/>
       <el-table-column prop="birthday" label="出生日期" width="120" align="center"/>
@@ -147,8 +154,10 @@
         <el-col :span="12">
           <el-form-item label="头像：" prop="avatar">
             <!-- 上传表单 -->
-            <el-upload class="avatar-uploader">
-              <div class="avatar"></div>
+            <el-upload class="avatar-uploader" action="/api/member/avatar" :headers="headers"
+                       :show-file-list="false" :on-success="avatarUploadSuccess">
+              <div class="avatar-img" v-if="memberModel.avatar"
+                   :style="'background-image: url('+memberModel.avatar+')'"></div>
               <el-icon class="avatar-icon">
                 <Plus/>
               </el-icon>
@@ -266,16 +275,26 @@
   margin-top: 10px;
 }
 
-.avatar {
-  width: 175px;
-  height: 175px;
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-}
-
 .avatar-uploader {
   position: relative;
-  height: 175px; /*影响高度，进一步影响头像icon位置*/
+  /*width: 100%;*/
+  /*width: 170px;*/
+  height: 170px; /*影响高度，进一步影响头像icon位置*/
+  border: 1px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-img {
+  /*width: 100%;*/
+  width: 170px;
+  height: 170px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
 }
 
 .avatar-icon {
@@ -286,6 +305,16 @@
   margin-left: -15px;
   display: block;
   font-size: 30px;
+}
+
+.row-avatar {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 }
 </style>
 
@@ -334,6 +363,7 @@ onMounted(() => {
 //封装表单查询条件
 let searchModel = ref({
   memberId: null,
+  avatar: null,
   name: null,
   gender: null,
   birthdayRange: [],
@@ -727,6 +757,15 @@ const uploadRef = ref();
 //提交文件并上传
 function submitImportExcel() {
   uploadRef.value.submit();
+}
+
+//头像文件上传成功之后的回调函数
+function avatarUploadSuccess(resp) {
+  if (resp.success) {
+    memberModel.value.avatar = resp.data;
+  } else {
+    ElMessage.error("头像上传失败");
+  }
 }
 
 </script>
