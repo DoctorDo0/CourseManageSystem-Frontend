@@ -14,8 +14,8 @@ function findAll(pageNo, pageSize, params) {
 
 function deleteByIds(ids) {
     return api({
-        url: "/appointment/cancel",
-        method: "put",
+        url: "/appointment",
+        method: "delete",
         data: ids
     })
 }
@@ -48,6 +48,14 @@ function getCourseInfoMainInfo() {
         url: "/course-info/mainInfo",
         method: "get"
     });
+}
+
+function bookAppointmentWithParam(appointment) {
+    return api({
+        url: "/appointment/book",
+        method: "post",
+        data: appointment
+    })
 }
 
 function cancelAppointmentByIds(ids) {
@@ -97,6 +105,7 @@ export {
     update,
     getStudentMainInfo,
     getCourseInfoMainInfo,
+    bookAppointmentWithParam,
     cancelAppointmentByIds,
     setAttendStatusByIds,
     setAbsentStatusByIds,

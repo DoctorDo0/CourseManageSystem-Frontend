@@ -62,7 +62,8 @@
       <el-button type="primary" :icon="Search" @click="doSearch">查询</el-button>
       <el-button type="primary" :icon="Refresh" @click="resetForm">重置</el-button>
       <el-button type="danger" :icon="Delete" @click="doDelete">删除</el-button>
-      <el-button type="info" :icon="InfoFilled" @click="cancelAppointment">取消预约</el-button>
+      <el-button type="primary" :icon="CirclePlusFilled" @click="bookAppointment">预约</el-button>
+      <el-button type="info" :icon="RemoveFilled" @click="cancelAppointment">取消预约</el-button>
       <el-button type="success" :icon="CircleCheckFilled" @click="attendStatus">设置签到</el-button>
       <el-button type="danger" :icon="CircleCloseFilled" @click="absentStatus">设置旷课</el-button>
       <el-button type="warning" :icon="WarningFilled" @click="lateStatus">设置迟到</el-button>
@@ -199,6 +200,7 @@
 <script setup>
 import {nextTick, onMounted, reactive, ref, toRaw} from "vue";
 import {
+  bookAppointmentWithParam,
   cancelAppointmentByIds,
   deleteByIds as apiDeleteByIds,
   findAll,
@@ -215,11 +217,12 @@ import {
   CircleCheckFilled,
   CircleCloseFilled,
   CirclePlus,
+  CirclePlusFilled,
   Delete,
   Edit,
-  InfoFilled,
   QuestionFilled,
   Refresh,
+  RemoveFilled,
   Search,
   WarningFilled,
 } from "@element-plus/icons-vue";
@@ -497,7 +500,7 @@ const rules = {
 function doAdd() {
   mode.value = "add";
   showDlg.value = true;
-  dlgTitle.value = "新增课程";
+  dlgTitle.value = "新增预约课程信息";
 }
 
 //编辑功能
@@ -516,7 +519,7 @@ function doEdit() {
       row.password = null;
 
       appointmentModel.value = row;
-      dlgTitle.value = "修改课程";
+      dlgTitle.value = "修改预约课程信息";
       showDlg.value = true;
     });
   }
@@ -530,7 +533,7 @@ function rowEdit(row) {
     row.password = null;
 
     appointmentModel.value = row;
-    dlgTitle.value = "修改课程";
+    dlgTitle.value = "修改预约课程信息";
     showDlg.value = true;
   });
 }
@@ -543,20 +546,29 @@ function doSubmit() {
       if (mode.value === "add") {
         let resp = await save(params);
         if (resp.success) {
-          ElMessage.success("保存课程信息成功");
+          ElMessage.success("保存预约课程信息成功");
           showDlg.value = false;
           doSearch();
         } else {
-          ElMessage.error(resp.message || "保存课程信息失败");
+          ElMessage.error(resp.message || "保存预约课程信息失败");
         }
       } else if (mode.value === "edit") {
         let resp = await update(params);
         if (resp.success) {
-          ElMessage.success("修改课程信息成功");
+          ElMessage.success("修改预约课程信息成功");
           showDlg.value = false;
           doSearch();
         } else {
-          ElMessage.error(resp.message || "修改课程信息失败");
+          ElMessage.error(resp.message || "修改预约课程信息失败");
+        }
+      } else if (mode.value === "book") {
+        let resp = await bookAppointmentWithParam(params);
+        if (resp.success) {
+          ElMessage.success("预约课程成功");
+          showDlg.value = false;
+          doSearch();
+        } else {
+          ElMessage.error(resp.message || "预约课程失败");
         }
       }
     }
@@ -568,6 +580,13 @@ function closeDlg() {
   courseFormRef.value.resetFields();
   //TODO:
   setInitialFormData();//bug fixed: 用于修复，当第一次进入界面后，先点击编辑后，再点击新增，导致新增界面回显为第一次点击编辑的数据的bug
+}
+
+//预约功能
+function bookAppointment() {
+  mode.value = "book";
+  showDlg.value = true;
+  dlgTitle.value = "预约课程";
 }
 
 //多行取消预约功能
