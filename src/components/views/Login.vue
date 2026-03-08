@@ -53,12 +53,20 @@
 <style scoped>
 .main {
   height: 100%;
-  background: url("@/assets/login_bg.jpg") no-repeat center center/cover;
+  /*background: url("@/assets/login_bg.jpg") no-repeat center center/cover;*/
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+.main {
+  height: 100%;
+  width: 100%;
+  background-image: url("@/assets/bg.gif") !important;
+  background-repeat: repeat !important;
+  background-color: #0a0a0a !important
+  }
 
 .main > .mask {
   position: absolute;

@@ -460,20 +460,6 @@ const teacherModel = ref({
   avatar: null
 });
 
-function setInitialFormData() {
-  teacherModel.value.teacherId = null;
-  teacherModel.value.teacherPassword = null;
-  teacherModel.value.name = null;
-  teacherModel.value.gender = "男";
-  teacherModel.value.birthday = null;
-  teacherModel.value.phone = null;
-  teacherModel.value.email = null;
-  teacherModel.value.wechat = null;
-  teacherModel.value.qq = null;
-  teacherModel.value.description = null;
-  teacherModel.value.avatar = null;
-}
-
 //新增/修改表单对象
 const teacherFormRef = ref();
 
@@ -557,13 +543,14 @@ function doEdit() {
   } else {
     let row = toRaw(rows[0]);
     //在下一个时间滴答内，执行操作
+    teacherModel.value = row;
+    dlgTitle.value = "修改教师";
+
     nextTick(() => {
       mode.value = "edit";
       row = cloneDeep(row);//克隆出的新对象没有响应式能力
       row.password = null;
 
-      teacherModel.value = row;
-      dlgTitle.value = "修改教师";
       showDlg.value = true;
     });
   }
@@ -613,8 +600,6 @@ function doSubmit() {
 //关闭对话框时触发
 function closeDlg() {
   teacherFormRef.value.resetFields();
-  //TODO:
-  setInitialFormData();//bug fixed: 用于修复，当第一次进入界面后，先点击编辑后，再点击新增，导致新增界面回显为第一次点击编辑的数据的bug
 }
 
 //按钮切换字段及对象
@@ -734,7 +719,7 @@ function onCloseImportDialog() {
   //TODO:
   // 作用是当关闭时重置状态
   // 使用resetFields时el-form需要ref和model，el-form-item需要prop
-  // 正常使用时会警告，不使用该方法时仍能重置状态，故暂时注释掉该代码
+  // 正常使用时会警告，但表单内的destroy-on-close属性会正常生效，故暂时注释掉该代码
   // importFormRef.value.resetFields();
 }
 

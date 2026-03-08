@@ -9,6 +9,10 @@ const routes = [
         component: () => import("@/components/views/Main.vue"),
         children: [
             {
+                name: "main-data",
+                path: "/main/data",
+                component: () => import("@/components/views/data/Data.vue")
+            }, {
                 name: "main-student",
                 path: "/main/student",
                 component: () => import("@/components/views/student/Student.vue")
@@ -28,10 +32,6 @@ const routes = [
                 name: "main-appointment",
                 path: "/main/appointment",
                 component: () => import("@/components/views/appointment/Appointment.vue")
-            }, {
-                name: "main-calendar",
-                path: "/main/calendar",
-                component: () => import("@/components/views/calendar/Calendar.vue")
             }
         ]
     }, {
@@ -66,13 +66,13 @@ const routes = [
         name: "appointment",
         path: "/appointment",
         component: () => import("@/components/views/appointment/Appointment.vue")
-    }, {
-        name: "calendar",
-        path: "/calendar",
-        component: () => import("@/components/views/calendar/Calendar.vue")
     },
     //==========
     {
+        name: "data",
+        path: "/data",
+        component: () => import("@/components/views/data/Data.vue")
+    }, {
         name: "setting",
         path: "/setting",
         component: () => import("@/components/views/Setting.vue")

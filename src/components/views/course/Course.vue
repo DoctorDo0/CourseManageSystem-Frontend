@@ -297,12 +297,6 @@ const courseModel = ref({
   active: null
 });
 
-function setInitialFormData() {
-  courseModel.value.courseId = null;
-  courseModel.value.courseName = null;
-  courseModel.value.description = null;
-}
-
 //新增/修改表单对象
 const courseFormRef = ref();
 
@@ -335,14 +329,15 @@ function doEdit() {
   } else {
     let row = toRaw(rows[0]);
     //在下一个时间滴答内，执行操作
+    dlgTitle.value = "修改课程";
+    showDlg.value = true;
+
     nextTick(() => {
       mode.value = "edit";
       row = cloneDeep(row);//克隆出的新对象没有响应式能力
       row.password = null;
 
       courseModel.value = row;
-      dlgTitle.value = "修改课程";
-      showDlg.value = true;
     });
   }
 }
@@ -391,8 +386,6 @@ function doSubmit() {
 //关闭对话框时触发
 function closeDlg() {
   courseFormRef.value.resetFields();
-  //TODO:
-  setInitialFormData();//bug fixed: 用于修复，当第一次进入界面后，先点击编辑后，再点击新增，导致新增界面回显为第一次点击编辑的数据的bug
 }
 
 //按钮切换字段及对象
