@@ -18,11 +18,13 @@ api.interceptors.response.use(
     error => {
         if (error.response.status === 401) {
             removeJwt();
-            location.href = "/login";
+            // location.href = "/login";
+            const isPeoplePage = location.pathname.startsWith("/Student");
+            location.href = isPeoplePage ? "/Student-login" : "/login";
             return false;
         }
         return {
-            code: 500,
+            code: error.response.status || 500,
             success: false,
             msg: error || "api接口调用失败"
         };

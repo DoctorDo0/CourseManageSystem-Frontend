@@ -3,7 +3,7 @@
     <div class="login-body">
       <div class="pic"></div>
       <div class="form">
-        <h1>中享思途-校园课程预约管理系统</h1>
+        <h1>UOCRMS大学公开课预约管理系统</h1>
         <el-form style="padding: 10px" :model="loginModel" :rules="rules" ref="loginFormRef">
           <el-row>
             <el-col :span="24">

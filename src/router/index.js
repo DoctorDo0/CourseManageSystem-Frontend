@@ -71,6 +71,18 @@ const routes = [
         path: "/appointment",
         component: () => import("@/components/views/appointment/Appointment.vue")
     },
+    //学生客户端
+    //==========
+    {
+        name: "Student-login",
+        path: "/Student-login",
+        component: () => import("@/components/student/StudentLogin.vue")
+    }, {
+        name: "Student-course-main",
+        path: "/Student-course-main",
+        component: () => import("@/components/student/StudentCourseMain.vue")
+    },
+    //数据图表与其他功能
     //==========
     {
         name: "template",
@@ -109,11 +121,13 @@ router.beforeEach((to, from, next) => {
     if (jwt) {
         if (to.name === "login") {
             next("/main");
+        } else if (to.name === "Student-login") {
+            next("/Student-course-main");
         } else {
             next();
         }
     } else {
-        if (to.name === "login") {
+        if (to.name === "login" || to.name === "Student-login") {
             next();
         } else {
             next("/login");

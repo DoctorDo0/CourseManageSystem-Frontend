@@ -61,7 +61,7 @@ function bookAppointmentWithParam(appointment) {
 function cancelAppointmentByIds(ids) {
     return api({
         url: "/appointment/cancel",
-        method: "put",
+        method: "post",
         data: ids
     });
 }

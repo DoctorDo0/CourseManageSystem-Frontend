@@ -107,6 +107,7 @@
 
           <el-form-item label="课程ID：" prop="courseId">
             <el-select v-model="courseInfoModel.courseId" placeholder="请输入课程ID" value-key="id"
+                       :readonly="mode.valueOf() ==='edit'" :disabled="mode.valueOf() ==='edit'"
                        filterable clearable>
               <el-option
                   v-for="item in courseMainInfoOptions"
@@ -122,8 +123,10 @@
             <el-date-picker v-model="courseInfoModel.courseDate" type="date" value-format="YYYY-MM-DD"
                             format="YYYY-MM-DD" placeholder="请输入课程日期" style="width: 100%"/>
           </el-form-item>
-          <el-form-item label="课程地点：" prop="courseAddress">
-            <el-input v-model="courseInfoModel.courseAddress" placeholder="请输入课程地点"/>
+
+          <el-form-item label="课程最大人数：" prop="maxNumber">
+            <el-input v-model="courseInfoModel.maxNumber" placeholder="请输入课程最大人数"
+                      :readonly="mode.valueOf() ==='edit'" :disabled="mode.valueOf() ==='edit'"/>
           </el-form-item>
 
         </el-col>
@@ -152,6 +155,10 @@
                   :value="item.value"
               />
             </el-select>
+          </el-form-item>
+
+          <el-form-item label="课程地点：" prop="courseAddress">
+            <el-input v-model="courseInfoModel.courseAddress" placeholder="请输入课程地点"/>
           </el-form-item>
 
         </el-col>
@@ -387,6 +394,7 @@ const dlgTitle = ref();
 const courseInfoModel = ref({
   courseId: null,
   teacherId: null,
+  maxNumber: null,
   courseDate: null,
   coursePeriod: null,
   courseAddress: null,
@@ -408,6 +416,7 @@ const courseInfoModel = ref({
 function setInitialFormData() {
   courseInfoModel.value.courseId = null;
   courseInfoModel.value.teacherId = null;
+  courseInfoModel.value.maxNumber = null;
   courseInfoModel.value.courseDate = null;
   courseInfoModel.value.coursePeriod = null;
   courseInfoModel.value.courseAddress = null;
@@ -432,6 +441,9 @@ const rules = {
   ],
   teacherId: [
     {required: true, message: "教师ID不可为空", trigger: "blur"}
+  ],
+  maxNumber: [
+    {required: true, message: "课程最大人数不可为空", trigger: "blur"}
   ],
   courseDate: [
     {required: true, message: "课程日期不可为空", trigger: "blur"}
